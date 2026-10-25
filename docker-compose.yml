@@ -24,22 +24,19 @@ services:
       - front-tier
       - back-tier
 
+
   result:
-    build: ./result
-    # use nodemon rather than node for local dev
-    entrypoint: nodemon --inspect=0.0.0.0 server.js
-    depends_on:
-      db:
-        condition: service_healthy 
-    volumes:
-      - ./result:/usr/local/app
-    ports:
+     build: ./result
+     entrypoint: nodemon --inspect=0.0.0.0 server.js
+     ports:
       - "8081:80"
-      - "127.0.0.1:9229:9229"
-    networks:
+     volumes:
+      - ./result:/usr/local/app
+     mkdir -p ~/projects/ai-cicd-analyzer
+cd ~/projects/ai-cicd-analyzer
+pwdnetworks:
       - front-tier
       - back-tier
-
   worker:
     build:
       context: ./worker
