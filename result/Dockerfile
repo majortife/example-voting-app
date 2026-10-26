@@ -1,19 +1,16 @@
+FROM node:22-bookworm-slim@sha256:sha256:de170b39439eb0e5a3444ad7d60b015614a381e10fecae2e30ec9e735122f38d
 
-FROM node:18-slim@sha256:f9ab18e354e6855ae56ef2b290dd225c1e51a564f87584b9bd21dd651838830e
-
-# Add curl for healthcheck
+# Install curl for health checks and tini for signal handling
 RUN apt-get update && \
     apt-get install -y --no-install-recommends curl tini && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/local/app
 
-# Have nodemon available for local development
-RUN npm install -g nodemon
-
 COPY package*.json ./
 
-RUN npm ci && \
+# Install production dependencies only
+RUN npm ci --omit=dev && \
     npm cache clean --force && \
     mv /usr/local/app/node_modules /node_modules
 
